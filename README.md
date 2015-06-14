@@ -1,10 +1,15 @@
-audio.js
+flashfp3.js
 ============
 
-The Audio plugin provides an audio `engine` for playing back html5 audio similar to video with the `html5` engine as it's not provided within Flowplayer 6 by default.
+The Flowplayer 3 Flash Engine for Flowplayer 6 enables features not enabled by the default Flash player including plugin support and GPU acceleration playback.
 
-This feature simply requires css overrides to modify the styling of the player and enable the `audio` engine.
+This is mainly for a future feature for Widevine Classic and Modular DASH support, Flash Access and HDS streaming.
 
+Customised main players will have to be devised also as the default Flash is too restrictive for other streaming providers and it will lose native fullscreen support.
+
+Native fullscreen in Flash and GPU accelerated playback is desireable for performance reasons.
+
+Any of the plugins i.e Ads can be loaded here which I believe is what DFP Ads is still using for playback.
 
 
 Examples
@@ -12,23 +17,52 @@ Examples
 
 ### Basic Example
 
-```html
-<div id="player" class="flowplayer fixed-controls play-button is-splash is-audio" data-embed="false">
-        <video preload="none">
-            <source type="audio/mp4" src="http://videos.electroteque.org/audio/Rakim.m4a">
-            <source type="audio/mpeg" src="http://videos.electroteque.org/audio/Rakim.mp3">
-            <source type="audio/ogg" src="http://videos.electroteque.org/audio/Rakim.ogg">
-        </video>
-</div>
+```javascript
+$(function () {
+
+            api = flowplayer("#player", {
+                clip: {
+                    sources: [
+                        {type: "video/mp4", src: "http://videos.electroteque.org/big_buck_bunny_400k.mp4"},
+                        {type: "video/ogg", src: "http://videos.electroteque.org/big_buck_bunny_480p_h264.ogv"},
+                        {type: "video/flash", src: "mp4:big_buck_bunny_400k.mp4"}
+                    ]
+                    //autoPlay: true
+                },
+                wmode: "direct",
+                embed: false,
+                autoplay: false,
+                native_controls: false,
+                swf: "flowplayer-3.2.18.swf",
+                flash: {
+                    key: "yourkeyhere",
+                    clip: {
+                        //autoPlay: true
+                    },
+                    //configure the rtmp plugin
+                    plugins: {
+                        rtmp: { url: "flowplayer.rtmp-3.2.13.swf" }
+                    },
+                    log: {
+                        level: "debug",
+                        filter: "org.flowplayer.controller.*"
+                    }
+                },
+                rtmp:"rtmp://rtmp.electroteque.org/cfx/st"
+            });
+
+
+        });
+
 ```
 
 Compiling
 ------------
 
-The `audio.js` distribution file is compiled with Uglify.js like so:
+The `flashfp3.js` distribution file is compiled with Uglify.js like so:
 
 ```bash
-uglifyjs src/audio.js --comments --mangle -c > audio.min.js
+make min
 ```
 
 Support
@@ -39,4 +73,4 @@ This is supplied as-is.
 Demo
 ------------
 
-Fully functional demo available on the audio player features page http://flowplayer.electroteque.org/audio/fp5
+Fully functional demo available on the audio player features page http://flowplayer.electroteque.org/flashfp3/fp6
