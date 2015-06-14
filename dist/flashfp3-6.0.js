@@ -352,7 +352,6 @@ Fp3Engine.prototype.pick = function(sources) {
 
 Fp3Engine.prototype.load = function(video) {
 
-    // loadVideo = video;
     var common = this.common,
         html5Tag = common.find("video", this.root)[0],
         url = Fp3EngineUtils.escapeURL(video.src),
@@ -454,7 +453,7 @@ Fp3Engine.prototype.load = function(video) {
                 if (this.conf.playlist[index].flash) this.extend(clip, this.conf.playlist[index].flash);
 
                 playlist.push(clip);
-            });
+            }.bind(this));
 
             opts.playlist = playlist;
 
