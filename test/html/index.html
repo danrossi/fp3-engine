@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <title></title>
+    <link rel="stylesheet" href="//releases.flowplayer.org/6.0.0/skin/minimalist.css"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+    <script src="../javascript/flowplayer.min.js"></script>
+
+
+
+
+</head>
+
+<body id="plugins_audio">
+
+
+<div id="wrap">
+
+    <style>
+        body { font: 12px "Lucida Grande",sans-serif; }
+        .flowplayer { width: 620px; height: 350px; background-color: #444; margin: 50px auto;  }
+        .flowplayer.is-loading { border: 1px solid #000; }
+
+    </style>
+
+
+<script src="../javascript/flashfp3-6.0.min.js"></script>
+
+
+<div id="content">
+
+
+<h1>
+    <strong>Flowplayer 3 Within Flowplayer 6</strong>
+
+</h1>
+
+<br><br>
+<p>Demonstration tests of Flowplayer 3 embedding within Flowplayer 6, if required when loaded this will take over the flash engine config.</p>
+    <p>The default `wmode` of the player is not set to direct therefore enabling direct will enable GPU Acceleration playback features available in Flowplayer 3.</p>
+
+    <div id="player"></div>
+        <!--<video>
+            <source type="video/mp4" src="http://videos.electroteque.org/big_buck_bunny_480p_h264.mp4"/>
+        </video>-->
+
+
+    <script type="text/javascript">
+        var api;
+        $(function () {
+
+            api = flowplayer("#player", {
+                clip: {
+                    sources: [
+                        {type: "video/mp4", src: "http://videos.electroteque.org/big_buck_bunny_400k.mp4"},
+                        {type: "video/ogg", src: "http://videos.electroteque.org/big_buck_bunny_480p_h264.ogv"},
+                        {type: "video/flash", src: "mp4:big_buck_bunny_400k.mp4"}
+                    ]
+                    //autoPlay: true
+                },
+                wmode: "direct",
+                embed: false,
+                autoplay: false,
+                native_controls: false,
+                swf: "flowplayer-3.2.18.swf",
+                flash: {
+                    key: "yourkeyhere",
+                    clip: {
+                        //autoPlay: true
+                    },
+                    //configure the rtmp plugin
+                    plugins: {
+                        rtmp: { url: "flowplayer.rtmp-3.2.13.swf" }
+                    },
+                    log: {
+                        level: "debug",
+                        filter: "org.flowplayer.controller.*"
+                    }
+                },
+                rtmp:"rtmp://rtmp.electroteque.org/cfx/st"
+            });
+
+
+        });
+
+        function pause() {
+             api.pause();
+        }
+
+        function resume() {
+            api.resume();
+        }
+
+        function seek(time) {
+            api.seek(time);
+        }
+
+        function mute() {
+            api.mute();
+        }
+
+        function stop() {
+            api.stop();
+        }
+
+        function toggle() {
+            api.toggle();
+        }
+
+        function fullscreen() {
+            api.fullscreen();
+        }
+
+        function play() {
+            api.play("http://videos.electroteque.org/Elephants_Dream_720-h264-st-aac.mp4");
+        }
+    </script>
+
+
+    <button onclick="pause();return false;">PAUSE</button>
+    <button onclick="resume();return false;">RESUME</button>
+    <button onclick="seek(10);return false;">SEEK</button>
+    <button onclick="mute();return false;">MUTE</button>
+    <button onclick="stop();return false;">STOP</button>
+    <button onclick="toggle();return false;">TOGGLE</button>
+    <button onclick="play();return false;">PLAY</button>
+
+    <br clear="all" />
+
+
+<h2>Configuration</h2>
+
+
+
+    <div class="box code">
+<pre><code class="javascript">
+    var api;
+    $(function () {
+
+    api = flowplayer("#player", {
+    clip: {
+    sources: [
+    {type: "video/mp4", src: "http://videos.electroteque.org/big_buck_bunny_400k.mp4"},
+    {type: "video/ogg", src: "http://videos.electroteque.org/big_buck_bunny_480p_h264.ogv"},
+    {type: "video/flash", src: "mp4:big_buck_bunny_400k.mp4"}
+    ]
+    //autoPlay: true
+    },
+    wmode: "direct",
+    embed: false,
+    autoplay: false,
+    native_controls: false,
+    swf: "flowplayer-3.2.18.swf",
+    flash: {
+    key: "yourkeyhere",
+    clip: {
+    //autoPlay: true
+    },
+    //configure the rtmp plugin
+    plugins: {
+    rtmp: { url: "flowplayer.rtmp-3.2.13.swf" }
+    },
+    log: {
+    level: "debug",
+    filter: "org.flowplayer.controller.*"
+    }
+    },
+    rtmp:"rtmp://rtmp.electroteque.org/cfx/st"
+    });
+
+
+    });
+
+    function pause() {
+    api.pause();
+    }
+
+    function resume() {
+    api.resume();
+    }
+
+    function seek(time) {
+    api.seek(time);
+    }
+
+    function mute() {
+    api.mute();
+    }
+
+    function stop() {
+    api.stop();
+    }
+
+    function toggle() {
+    api.toggle();
+    }
+
+    function fullscreen() {
+    api.fullscreen();
+    }
+
+    function play() {
+    api.play("http://videos.electroteque.org/Elephants_Dream_720-h264-st-aac.mp4");
+    }
+</code></pre>
+    </div>
+
+
+    <a name="nativeExample"></a>
+    <h2><em>Native Controls</em> Example</h2>
+    <p>
+        This example demonstrates using the native Flowplayer 3 controls and display.
+    </p>
+
+  <div id="native"></div>
+
+<script type="text/javascript">
+    $(function () {
+
+        flowplayer("#native",{
+            clip: {
+                sources: [
+                    {type: "video/mp4", src: "http://videos.electroteque.org/big_buck_bunny_400k.mp4"},
+                    {type: "video/ogg", src: "http://videos.electroteque.org/big_buck_bunny_480p_h264.ogv"},
+                    {type: "video/flash", src: "mp4:big_buck_bunny_400k.mp4"}
+                ]
+                //autoPlay: true
+            },
+            wmode: "direct",
+            embed: false,
+            autoplay: false,
+            native_controls: true,
+            swf: "flowplayer-3.2.18.swf",
+            flash: {
+                key: "yourkeyhere",
+                clip: {
+                    //autoPlay: true
+                },
+                //configure the rtmp plugin
+                plugins: {
+                    rtmp: { url: "flowplayer.rtmp-3.2.13.swf" }
+                },
+                log: {
+                    level: "debug",
+                    filter: "org.flowplayer.controller.*"
+                }
+            },
+            rtmp:"rtmp://rtmp.electroteque.org/cfx/st"
+        });
+
+    });
+
+</script>
+
+
+    <div class="box code">
+<pre><code class="html">
+    $(function () {
+
+    flowplayer("#native",{
+    clip: {
+    sources: [
+    {type: "video/mp4", src: "http://videos.electroteque.org/big_buck_bunny_400k.mp4"},
+    {type: "video/ogg", src: "http://videos.electroteque.org/big_buck_bunny_480p_h264.ogv"},
+    {type: "video/flash", src: "mp4:big_buck_bunny_400k.mp4"}
+    ]
+    //autoPlay: true
+    },
+    wmode: "direct",
+    embed: false,
+    autoplay: false,
+    native_controls: true,
+    swf: "flowplayer-3.2.18.swf",
+    flash: {
+    key: "yourkeyhere",
+    clip: {
+    //autoPlay: true
+    },
+    //configure the rtmp plugin
+    plugins: {
+    rtmp: { url: "flowplayer.rtmp-3.2.13.swf" }
+    },
+    log: {
+    level: "debug",
+    filter: "org.flowplayer.controller.*"
+    }
+    },
+    rtmp:"rtmp://rtmp.electroteque.org/cfx/st"
+    });
+
+    });
+
+</code></pre>
+    </div>
+
+
+
+
+</div>
+
+
+</div>
+
+
+</body>
+</html>
