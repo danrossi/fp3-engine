@@ -25,7 +25,7 @@ var fp3Engine = Fp3EngineWrapper;
 fp3Engine.engineName = 'flashfp3';
 
 fp3Engine.canPlay = function(type, conf) {
-    return flowplayer.support.flashVideo && /video\/(mp4|flash|flv)/i.test(type) || flowplayer.support.flashVideo && conf.swfWidevine && /widevine/i.test(type);
+    return flowplayer.support.flashVideo && /video\/(mp4|flash|flv)/i.test(type);
 };
 
 flowplayer.engines.unshift(fp3Engine);

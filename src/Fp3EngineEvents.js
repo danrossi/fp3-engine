@@ -20,49 +20,53 @@ function Fp3EngineEvents(engine) {
     this.extend = flowplayer.extend;
 }
 
-Fp3EngineEvents.prototype.onStageVideoStateChange = function() {
-
+Fp3EngineEvents.prototype.onNetStreamEvent = function(e) {
+    this.triggerEvent("netstreamevent", e);
 }
 
-Fp3EngineEvents.prototype.onClipAdd =  function (e) {
+Fp3EngineEvents.prototype.onUpdate = flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onStageVideoStateChange = flowplayer.common.noop;
 
-Fp3EngineEvents.prototype.onLoad = function() {
+Fp3EngineEvents.prototype.onClipAdd =  flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onLoad = flowplayer.common.noop;
 
-Fp3EngineEvents.prototype.onBeforeBegin = function() {
+Fp3EngineEvents.prototype.onBeforeBegin = flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onConnect = flowplayer.common.noop;
 
-Fp3EngineEvents.prototype.onConnect = function() {
+Fp3EngineEvents.prototype.onMouseOut = flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onMouseOver = flowplayer.common.noop;
 
-Fp3EngineEvents.prototype.onMouseOut = function() {
+Fp3EngineEvents.prototype.onBeforePluginEvent = flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onResized = flowplayer.common.noop;
 
-Fp3EngineEvents.prototype.onMouseOver = function() {
+Fp3EngineEvents.prototype.onBegin = flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onBeforePause = flowplayer.common.noop;
 
-Fp3EngineEvents.prototype.onBeforePluginEvent = function() {
+Fp3EngineEvents.prototype.onBeforeResume = flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onBeforeVolume = flowplayer.common.noop;
 
-Fp3EngineEvents.prototype.onPluginEvent = function() {
+Fp3EngineEvents.prototype.onBeforeFullscreen = flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onBeforeUnmute = flowplayer.common.noop;
 
-Fp3EngineEvents.prototype.onResized = function() {
+Fp3EngineEvents.prototype.onUnmute = flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onBeforeMute = flowplayer.common.noop;
 
-Fp3EngineEvents.prototype.onMetaDataChange = function() {
+Fp3EngineEvents.prototype.onMute = flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onBeforeStop = flowplayer.common.noop;
+
+Fp3EngineEvents.prototype.onStop = flowplayer.common.noop;
+
+Fp3EngineEvents.prototype.onPlaylistReplace = flowplayer.common.noop;
 
 Fp3EngineEvents.prototype.triggerEvent = function(type, arg) {
     var event = {
@@ -70,6 +74,15 @@ Fp3EngineEvents.prototype.triggerEvent = function(type, arg) {
     };
 
     setTimeout(function() { this.player.trigger(event, [this.player, arg]);}.bind(this), 1);
+}
+
+
+Fp3EngineEvents.prototype.onPluginEvent = function(e) {
+    this.triggerEvent("pluginevent", e);
+}
+
+Fp3EngineEvents.prototype.onMetaDataChange = function(e) {
+    this.extend(this.player.video, e[1]);
 }
 
 Fp3EngineEvents.prototype.onMetaData = function(e) {
@@ -81,8 +94,12 @@ Fp3EngineEvents.prototype.onStart = function() {
     this.triggerEvent("resume");
 }
 
-Fp3EngineEvents.prototype.onBegin = function() {
+Fp3EngineEvents.prototype.onSwitch = function(e) {
+    this.triggerEvent("switch", e);
+}
 
+Fp3EngineEvents.prototype.onSwitchComplete = function(e) {
+    this.triggerEvent("switchcomplete", e);
 }
 
 Fp3EngineEvents.prototype.onBufferFull =  function() {
@@ -90,17 +107,9 @@ Fp3EngineEvents.prototype.onBufferFull =  function() {
     this.triggerEvent("buffered");
 }
 
-Fp3EngineEvents.prototype.onBeforePause = function() {
-
-}
-
 Fp3EngineEvents.prototype.onPause = function() {
     this.triggerEvent("pause");
     this.engine.clearProgress();
-}
-
-Fp3EngineEvents.prototype.onBeforeResume = function() {
-
 }
 
 Fp3EngineEvents.prototype.onResume = function() {
@@ -118,10 +127,6 @@ Fp3EngineEvents.prototype.onSeek = function(e) {
     this.triggerEvent("seek",  arg);
 }
 
-Fp3EngineEvents.prototype.onBeforeVolume = function() {
-
-}
-
 Fp3EngineEvents.prototype.onVolume = function (e) {
     var arg = (e[0] / 100);
     this.triggerEvent("volume", arg);
@@ -133,36 +138,4 @@ Fp3EngineEvents.prototype.onFullscreen = function () {
 
 Fp3EngineEvents.prototype.onFullscreenExit = function () {
     this.player.fullscreen = false;
-}
-
-Fp3EngineEvents.prototype.onBeforeFullscreen = function() {
-
-}
-
-Fp3EngineEvents.prototype.onBeforeUnmute = function () {
-
-}
-
-Fp3EngineEvents.prototype.onUnmute = function () {
-
-}
-
-Fp3EngineEvents.prototype.onBeforeMute = function() {
-
-}
-
-Fp3EngineEvents.prototype.onMute = function() {
-
-}
-
-Fp3EngineEvents.prototype.onBeforeStop = function() {
-
-}
-
-Fp3EngineEvents.prototype.onStop = function() {
-
-}
-
-Fp3EngineEvents.prototype.onPlaylistReplace = function() {
-
 }

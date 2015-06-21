@@ -15,13 +15,15 @@
 
 'use strict';
 function Fp3Engine(player, root) {
+    if (!arguments.length) return;
     this.common = flowplayer.common,
         this.bean = flowplayer.bean,
         this.support = flowplayer.support,
         this.player = player,
         this.root = root,
         this.callbackId,
-        this.conf = player.conf,
+        this.engineName = "flashfp3",
+    this.conf = player.conf,
         this.volumeLevel,
         this.callbackId,
         this.config = {
@@ -36,10 +38,13 @@ function Fp3Engine(player, root) {
         window.flowplayer.extend(flowplayer, {
             fireEvent: function() {
                 var a = [].slice.call(arguments);
+
+
                 //manually call the event object from the callback id
                 try {
                     window[a[0]][a[1]](a.slice(2));
                 } catch (e) {
+                    console.log(a);
                     console.log(e);
                 }
             }
@@ -74,7 +79,7 @@ Fp3Engine.prototype.pick = function(sources) {
         var selectedSource;
         for (var i = 0, source; i < sources.length; i++) {
             source = sources[i];
-            if (/mp4|flv|flash|widevine/i.test(source.type)) selectedSource = source;
+            if (/mp4|flv|flash/i.test(source.type)) selectedSource = source;
             if (selectedSource && !/mp4/i.test(selectedSource.type)) return selectedSource;
             // Did not find any source or source was video/mp4, let's try find more
         }
@@ -141,6 +146,15 @@ Fp3Engine.prototype.load = function(video) {
         this.callbackId = "fpCallback" + ("" + Math.random()).slice(3, 15);
 
 
+        // issue #733
+        var bgColor = common.css(this.root, 'background-color') ||'', bg;
+        if (bgColor.indexOf('rgb') === 0) {
+            bg = Fp3EngineUtils.toHex(bgColor);
+        } else if (bgColor.indexOf('#') === 0) {
+            bg = Fp3EngineUtils.toLongHex(bgColor);
+        }
+
+
         var opts = {
             clip: {
                 url: url,
@@ -150,9 +164,18 @@ Fp3Engine.prototype.load = function(video) {
                 accelerated: this.player.conf.wmode == "direct"
                 //onCuepoint: player.conf.cuepoints
             },
+            screen: {
+                backgroundColor: bg,
+                backgroundGradient: "none"
+            },
+            canvas: {
+                backgroundColor: bg,
+                backgroundGradient: "none"
+            },
             plugins: {},
             playerId : this.callbackId
         };
+
 
         //if using native controls disable the overlay ui
         if (this.config.native_controls) {
@@ -205,13 +228,7 @@ Fp3Engine.prototype.load = function(video) {
             opts.clip.netConnectionUrl = this.conf.rtmp;
         }
 
-        // issue #733
-        var bgColor = common.css(this.root, 'background-color') ||'', bg;
-        if (bgColor.indexOf('rgb') === 0) {
-            bg = Fp3EngineUtils.toHex(bgColor);
-        } else if (bgColor.indexOf('#') === 0) {
-            bg = Fp3EngineUtils.toLongHex(bgColor);
-        }
+
 
         this.api = Fp3EngineUtils.embed(this.conf.swf, opts, this.conf.wmode, bg)[0];
 
