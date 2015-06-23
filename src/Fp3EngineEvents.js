@@ -107,6 +107,11 @@ Fp3EngineEvents.prototype.onBufferFull =  function() {
     this.triggerEvent("buffered");
 }
 
+Fp3EngineEvents.prototype.onBufferEmpty =  function() {
+    this.player.video.buffered = false;
+    this.triggerEvent("buffer");
+}
+
 Fp3EngineEvents.prototype.onPause = function() {
     this.triggerEvent("pause");
     this.engine.clearProgress();
