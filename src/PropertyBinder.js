@@ -1,10 +1,10 @@
 function PropertyBinder() {}
 
-PropertyBinder.copy = function(target, src) {
+PropertyBinder.copy = function(src, target) {
     for (var p in src) {
         try {
             if ( src[p].constructor==Object ) {
-                target[p] = PropertyBinder.copy(target[p], src[p]);
+                target[p] = PropertyBinder.copy(src[p], target[p]);
 
             } else {
                target[p] = src[p];

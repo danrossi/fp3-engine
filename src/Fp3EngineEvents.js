@@ -77,6 +77,12 @@ Fp3EngineEvents.prototype.triggerEvent = function(type, arg) {
 }
 
 
+Fp3EngineEvents.prototype.onBufferStop = flowplayer.common.noop;
+
+Fp3EngineEvents.prototype.onError = function(e) {
+   // this.triggerEvent("error", { code : 4} );
+}
+
 Fp3EngineEvents.prototype.onPluginEvent = function(e) {
     this.triggerEvent("pluginevent", e);
 }

@@ -182,6 +182,17 @@ Fp3Engine.prototype.load = function(video) {
             var ui = common.find(".fp-player", this.root)[0];
             common.css(ui, "display", "none");
 
+
+
+            flowplayer.bean.off(this.root, "click.player");
+
+           // common.css(this.root, "pointer-events", "none");
+            //common.css(this.root, "z-Index", -100);
+
+           // common.removeNode(ui);
+
+            this.player.off("mouseenter click");
+
             this.player.one("ready", function() {
                 common.removeClass(this.root, "is-poster");
 
@@ -216,7 +227,7 @@ Fp3Engine.prototype.load = function(video) {
         }
 
         //copy specific configs to use for the embed including clip and plugin properties
-        PropertyBinder.copy(opts, this.conf.flash);
+        PropertyBinder.copy(this.conf.flash,opts);
 
 
         // bufferTime might be 0
@@ -227,7 +238,6 @@ Fp3Engine.prototype.load = function(video) {
             opts.clip.provider = "rtmp";
             opts.clip.netConnectionUrl = this.conf.rtmp;
         }
-
 
 
         this.api = Fp3EngineUtils.embed(this.conf.swf, opts, this.conf.wmode, bg)[0];
