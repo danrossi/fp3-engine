@@ -335,6 +335,15 @@ Fp3Engine.prototype.volume = function(level) {
     } catch (e) {}
 }
 
+Fp3Engine.prototype.getPlugin = function(name) {
+    this.api.fp_getPlugin(name);
+}
+
+/*Fp3Engine.prototype.callPluginMethod = function(name, method, arg) {
+    var a = [].slice.call(arguments, 2);
+    return this.api.fp_invoke(name, method, [arg]);
+}*/
+
 Fp3Engine.prototype.callMethod = function(name, arg) {
     try {
         if (this.player.ready) {
