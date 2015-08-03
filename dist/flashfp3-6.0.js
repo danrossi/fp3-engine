@@ -1,10 +1,10 @@
 function PropertyBinder() {}
 
-PropertyBinder.copy = function(target, src) {
+PropertyBinder.copy = function(src, target) {
     for (var p in src) {
         try {
             if ( src[p].constructor==Object ) {
-                target[p] = PropertyBinder.copy(target[p], src[p]);
+                target[p] = PropertyBinder.copy(src[p], target[p]);
 
             } else {
                target[p] = src[p];
@@ -59,7 +59,7 @@ Fp3EngineUtils.toLongHex = function(bg) {
  * Flash embedder duplicated as this is not exposed by Flowplayer 6
  */
 Fp3EngineUtils.embed = function(swf, flashvars, wmode, bgColor) {
-    wmode = wmode || "transparent";
+    wmode = wmode || "opaque";
 
     var id = "obj" + ("" + Math.random()).slice(2, 15),
         tag = '<object class="fp-engine" id="' + id+ '" name="' + id + '" ',
@@ -120,49 +120,63 @@ function Fp3EngineEvents(engine) {
     this.extend = flowplayer.extend;
 }
 
-Fp3EngineEvents.prototype.onStageVideoStateChange = function() {
 
+Fp3EngineEvents.errorCodes = {
+    202: 7
 }
 
-Fp3EngineEvents.prototype.onClipAdd =  function (e) {
-
+Fp3EngineEvents.prototype.onError = function(e) {
+    // console.log(e);
+    this.triggerEvent("error", { code: Fp3EngineEvents.errorCodes[e[0]]});
 }
 
-Fp3EngineEvents.prototype.onLoad = function() {
-
+Fp3EngineEvents.prototype.onNetStreamEvent = function(e) {
+    this.triggerEvent("netstreamevent", e);
 }
 
-Fp3EngineEvents.prototype.onBeforeBegin = function() {
+Fp3EngineEvents.prototype.onUpdate = flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onStageVideoStateChange = flowplayer.common.noop;
 
-Fp3EngineEvents.prototype.onConnect = function() {
+Fp3EngineEvents.prototype.onClipAdd =  flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onLoad = flowplayer.common.noop;
 
-Fp3EngineEvents.prototype.onMouseOut = function() {
+Fp3EngineEvents.prototype.onBeforeBegin = flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onConnect = flowplayer.common.noop;
 
-Fp3EngineEvents.prototype.onMouseOver = function() {
+Fp3EngineEvents.prototype.onMouseOut = flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onMouseOver = flowplayer.common.noop;
 
-Fp3EngineEvents.prototype.onBeforePluginEvent = function() {
+Fp3EngineEvents.prototype.onBeforePluginEvent = flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onResized = flowplayer.common.noop;
 
-Fp3EngineEvents.prototype.onPluginEvent = function() {
+Fp3EngineEvents.prototype.onBegin = flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onBeforePause = flowplayer.common.noop;
 
-Fp3EngineEvents.prototype.onResized = function() {
+Fp3EngineEvents.prototype.onBeforeResume = flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onBeforeVolume = flowplayer.common.noop;
 
-Fp3EngineEvents.prototype.onMetaDataChange = function() {
+Fp3EngineEvents.prototype.onBeforeFullscreen = flowplayer.common.noop;
 
-}
+Fp3EngineEvents.prototype.onBeforeUnmute = flowplayer.common.noop;
+
+Fp3EngineEvents.prototype.onUnmute = flowplayer.common.noop;
+
+Fp3EngineEvents.prototype.onBeforeMute = flowplayer.common.noop;
+
+Fp3EngineEvents.prototype.onMute = flowplayer.common.noop;
+
+Fp3EngineEvents.prototype.onBeforeStop = flowplayer.common.noop;
+
+Fp3EngineEvents.prototype.onStop = flowplayer.common.noop;
+
+Fp3EngineEvents.prototype.onPlaylistReplace = flowplayer.common.noop;
 
 Fp3EngineEvents.prototype.triggerEvent = function(type, arg) {
     var event = {
@@ -170,6 +184,17 @@ Fp3EngineEvents.prototype.triggerEvent = function(type, arg) {
     };
 
     setTimeout(function() { this.player.trigger(event, [this.player, arg]);}.bind(this), 1);
+}
+
+
+Fp3EngineEvents.prototype.onBufferStop = flowplayer.common.noop;
+
+Fp3EngineEvents.prototype.onPluginEvent = function(e) {
+    this.triggerEvent("pluginevent", e);
+}
+
+Fp3EngineEvents.prototype.onMetaDataChange = function(e) {
+    this.extend(this.player.video, e[1]);
 }
 
 Fp3EngineEvents.prototype.onMetaData = function(e) {
@@ -181,8 +206,12 @@ Fp3EngineEvents.prototype.onStart = function() {
     this.triggerEvent("resume");
 }
 
-Fp3EngineEvents.prototype.onBegin = function() {
+Fp3EngineEvents.prototype.onSwitch = function(e) {
+    this.triggerEvent("switch", e);
+}
 
+Fp3EngineEvents.prototype.onSwitchComplete = function(e) {
+    this.triggerEvent("switchcomplete", e);
 }
 
 Fp3EngineEvents.prototype.onBufferFull =  function() {
@@ -190,17 +219,14 @@ Fp3EngineEvents.prototype.onBufferFull =  function() {
     this.triggerEvent("buffered");
 }
 
-Fp3EngineEvents.prototype.onBeforePause = function() {
-
+Fp3EngineEvents.prototype.onBufferEmpty =  function() {
+    this.player.video.buffered = false;
+    this.triggerEvent("buffer");
 }
 
 Fp3EngineEvents.prototype.onPause = function() {
     this.triggerEvent("pause");
     this.engine.clearProgress();
-}
-
-Fp3EngineEvents.prototype.onBeforeResume = function() {
-
 }
 
 Fp3EngineEvents.prototype.onResume = function() {
@@ -218,10 +244,6 @@ Fp3EngineEvents.prototype.onSeek = function(e) {
     this.triggerEvent("seek",  arg);
 }
 
-Fp3EngineEvents.prototype.onBeforeVolume = function() {
-
-}
-
 Fp3EngineEvents.prototype.onVolume = function (e) {
     var arg = (e[0] / 100);
     this.triggerEvent("volume", arg);
@@ -233,38 +255,6 @@ Fp3EngineEvents.prototype.onFullscreen = function () {
 
 Fp3EngineEvents.prototype.onFullscreenExit = function () {
     this.player.fullscreen = false;
-}
-
-Fp3EngineEvents.prototype.onBeforeFullscreen = function() {
-
-}
-
-Fp3EngineEvents.prototype.onBeforeUnmute = function () {
-
-}
-
-Fp3EngineEvents.prototype.onUnmute = function () {
-
-}
-
-Fp3EngineEvents.prototype.onBeforeMute = function() {
-
-}
-
-Fp3EngineEvents.prototype.onMute = function() {
-
-}
-
-Fp3EngineEvents.prototype.onBeforeStop = function() {
-
-}
-
-Fp3EngineEvents.prototype.onStop = function() {
-
-}
-
-Fp3EngineEvents.prototype.onPlaylistReplace = function() {
-
 }/* Fp3Engine.js
  * Flowplayer 3 Flash Engine for Flowplayer 6
  * This is to provide full embed support for Flowplayer 3 including plugins and features.
@@ -282,13 +272,15 @@ Fp3EngineEvents.prototype.onPlaylistReplace = function() {
 
 'use strict';
 function Fp3Engine(player, root) {
+    if (!arguments.length) return;
     this.common = flowplayer.common,
         this.bean = flowplayer.bean,
         this.support = flowplayer.support,
         this.player = player,
         this.root = root,
         this.callbackId,
-        this.conf = player.conf,
+        this.engineName = "flashfp3",
+    this.conf = player.conf,
         this.volumeLevel,
         this.callbackId,
         this.config = {
@@ -303,10 +295,13 @@ function Fp3Engine(player, root) {
         window.flowplayer.extend(flowplayer, {
             fireEvent: function() {
                 var a = [].slice.call(arguments);
+
+
                 //manually call the event object from the callback id
                 try {
                     window[a[0]][a[1]](a.slice(2));
                 } catch (e) {
+                    console.log(a);
                     console.log(e);
                 }
             }
@@ -341,7 +336,7 @@ Fp3Engine.prototype.pick = function(sources) {
         var selectedSource;
         for (var i = 0, source; i < sources.length; i++) {
             source = sources[i];
-            if (/mp4|flv|flash|widevine/i.test(source.type)) selectedSource = source;
+            if (/mp4|flv|flash/i.test(source.type)) selectedSource = source;
             if (selectedSource && !/mp4/i.test(selectedSource.type)) return selectedSource;
             // Did not find any source or source was video/mp4, let's try find more
         }
@@ -408,23 +403,55 @@ Fp3Engine.prototype.load = function(video) {
         this.callbackId = "fpCallback" + ("" + Math.random()).slice(3, 15);
 
 
+        // issue #733
+        var bgColor = common.css(this.root, 'background-color') ||'', bg;
+        if (bgColor.indexOf('rgb') === 0) {
+            bg = Fp3EngineUtils.toHex(bgColor);
+        } else if (bgColor.indexOf('#') === 0) {
+            bg = Fp3EngineUtils.toLongHex(bgColor);
+        }
+
+
+
+
         var opts = {
             clip: {
                 url: url,
                 autoPlay: this.player.conf.autoplay,
                 autoBuffering: !this.player.conf.autoplay,
                 //autoBuffering: !this.player.conf.autoplay && !this.player.conf.native_controls,
-                accelerated: this.player.conf.wmode == "direct"
+                //accelerated: this.player.conf.wmode == "direct"
+                accelerated: true
                 //onCuepoint: player.conf.cuepoints
+            },
+            screen: {
+                backgroundColor: bg,
+                backgroundGradient: "none"
+            },
+            canvas: {
+                backgroundColor: bg,
+                backgroundGradient: "none"
             },
             plugins: {},
             playerId : this.callbackId
         };
 
+
         //if using native controls disable the overlay ui
         if (this.config.native_controls) {
             var ui = common.find(".fp-player", this.root)[0];
             common.css(ui, "display", "none");
+
+
+
+            flowplayer.bean.off(this.root, "click.player");
+
+           // common.css(this.root, "pointer-events", "none");
+            //common.css(this.root, "z-Index", -100);
+
+           // common.removeNode(ui);
+
+            this.player.off("mouseenter click");
 
             this.player.one("ready", function() {
                 common.removeClass(this.root, "is-poster");
@@ -460,7 +487,7 @@ Fp3Engine.prototype.load = function(video) {
         }
 
         //copy specific configs to use for the embed including clip and plugin properties
-        PropertyBinder.copy(opts, this.conf.flash);
+        PropertyBinder.copy(this.conf.flash,opts);
 
 
         // bufferTime might be 0
@@ -472,13 +499,35 @@ Fp3Engine.prototype.load = function(video) {
             opts.clip.netConnectionUrl = this.conf.rtmp;
         }
 
-        // issue #733
-        var bgColor = common.css(this.root, 'background-color') ||'', bg;
-        if (bgColor.indexOf('rgb') === 0) {
-            bg = Fp3EngineUtils.toHex(bgColor);
-        } else if (bgColor.indexOf('#') === 0) {
-            bg = Fp3EngineUtils.toLongHex(bgColor);
+
+
+        //enable gpu acceleration stagevideo fix for Windows Firefox. All other browsers can accept different wmodes.
+        if (flowplayer.support.browser.mozilla && opts.clip.accelerated) {
+            this.conf.wmode = "direct";
+            common.toggleClass(this.root, "is-accelerated");
+
+            delete opts["play"];
+
+
+           /* var container = common.createElement('div', { className: "flowplayer is-paused" , css: {display: "block" } });
+            var ui = common.createElement('div', { className: "fp-ui" , css: {  display: "block", width: "100%", height: "100%" } });
+
+            common.append(container,ui);
+
+            var ui2 = common.find('.fp-ui', container)[0];
+
+            var url = common.css(ui2, "backgroundImage").replace(/^url\(['"]?/,'').replace(/['"]?\)$/,'');
+
+            //console.log(url);
+
+            opts.play = {
+                url:  url
+            }
+
+            container = null;
+            ui = null;*/
         }
+
 
         this.api = Fp3EngineUtils.embed(this.conf.swf, opts, this.conf.wmode, bg)[0];
 
@@ -490,6 +539,29 @@ Fp3Engine.prototype.load = function(video) {
             var container = common.find('.fp-player', this.root)[0];
             common.prepend(container, this.api);
         }
+
+       /* var playerContainer = common.find('.fp-player', this.root)[0];
+        var container = common.createElement('div', { css: { "z-index":1, position: "absolute", display: "inline-block", width: "100%", height: "100%" } });
+        common.append(container, this.api);
+        common.prepend(this.root, container);*/
+
+        //var iframe = common.createElement('iframe', { css: { background: "#333333", alpha: 0.8, "z-index":99, position: "absolute", display: "block", width: "100%", height: "100%" } });
+
+        //common.insertAfter(this.root, container, iframe);
+
+
+       // var ui = common.find(".fp-player", this.root)[0];
+
+       // common.css(ui, { "z-index": 1000, position:"absolute" });
+
+        //var fs = common.createElement('a', { className: "fp-fullscreen1"});
+
+        //var ui2 = common.find(".fp-ui", this.root)[0];
+
+
+        //common.append(ui2, fs);
+
+
 
 
         // throw error if no loading occurs
@@ -575,6 +647,15 @@ Fp3Engine.prototype.volume = function(level) {
     } catch (e) {}
 }
 
+Fp3Engine.prototype.getPlugin = function(name) {
+    this.api.fp_getPlugin(name);
+}
+
+/*Fp3Engine.prototype.callPluginMethod = function(name, method, arg) {
+    var a = [].slice.call(arguments, 2);
+    return this.api.fp_invoke(name, method, [arg]);
+}*/
+
 Fp3Engine.prototype.callMethod = function(name, arg) {
     try {
         if (this.player.ready) {
@@ -631,7 +712,7 @@ var fp3Engine = Fp3EngineWrapper;
 fp3Engine.engineName = 'flashfp3';
 
 fp3Engine.canPlay = function(type, conf) {
-    return flowplayer.support.flashVideo && /video\/(mp4|flash|flv)/i.test(type) || flowplayer.support.flashVideo && conf.swfWidevine && /widevine/i.test(type);
+    return flowplayer.support.flashVideo && /video\/(mp4|flash|flv)/i.test(type);
 };
 
 flowplayer.engines.unshift(fp3Engine);

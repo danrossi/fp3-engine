@@ -20,6 +20,16 @@ function Fp3EngineEvents(engine) {
     this.extend = flowplayer.extend;
 }
 
+
+Fp3EngineEvents.errorCodes = {
+    202: 7
+}
+
+Fp3EngineEvents.prototype.onError = function(e) {
+    // console.log(e);
+    this.triggerEvent("error", { code: Fp3EngineEvents.errorCodes[e[0]]});
+}
+
 Fp3EngineEvents.prototype.onNetStreamEvent = function(e) {
     this.triggerEvent("netstreamevent", e);
 }
@@ -78,10 +88,6 @@ Fp3EngineEvents.prototype.triggerEvent = function(type, arg) {
 
 
 Fp3EngineEvents.prototype.onBufferStop = flowplayer.common.noop;
-
-Fp3EngineEvents.prototype.onError = function(e) {
-   // this.triggerEvent("error", { code : 4} );
-}
 
 Fp3EngineEvents.prototype.onPluginEvent = function(e) {
     this.triggerEvent("pluginevent", e);

@@ -1,0 +1,5 @@
+/* enable gpu acceleration stagevideo fix for Windows Firefox. Gpu acceleration will take over parts of the overlay that are transparent therefore background colours are required. */
+.flowplayer.is-accelerated .fp-fullscreen,.flowplayer.is-accelerated .fp-unload,.flowplayer.is-accelerated .fp-close,.flowplayer.is-accelerated .fp-embed,.flowplayer.is-accelerated.aside-time .fp-time{background-color:#000;background-color:rgba(0,0,0,1);}
+.flowplayer.is-accelerated.is-mouseover .fp-fullscreen,.flowplayer.is-accelerated.fixed-controls .fp-fullscreen { display: block; opacity: 1 !important;  }
+.flowplayer.is-accelerated.is-mouseout .fp-fullscreen { display: none !important; opacity: 1 !important; filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=1) !important;  }
+.flowplayer.is-accelerated .fp-controls, .flowplayer.is-accelerated .fp-play { background: #000000; }

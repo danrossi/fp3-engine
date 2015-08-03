@@ -42,7 +42,7 @@ Fp3EngineUtils.toLongHex = function(bg) {
  * Flash embedder duplicated as this is not exposed by Flowplayer 6
  */
 Fp3EngineUtils.embed = function(swf, flashvars, wmode, bgColor) {
-    wmode = wmode || "transparent";
+    wmode = wmode || "opaque";
 
     var id = "obj" + ("" + Math.random()).slice(2, 15),
         tag = '<object class="fp-engine" id="' + id+ '" name="' + id + '" ',

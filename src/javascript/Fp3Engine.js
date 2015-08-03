@@ -155,13 +155,16 @@ Fp3Engine.prototype.load = function(video) {
         }
 
 
+
+
         var opts = {
             clip: {
                 url: url,
                 autoPlay: this.player.conf.autoplay,
                 autoBuffering: !this.player.conf.autoplay,
                 //autoBuffering: !this.player.conf.autoplay && !this.player.conf.native_controls,
-                accelerated: this.player.conf.wmode == "direct"
+                //accelerated: this.player.conf.wmode == "direct"
+                accelerated: true
                 //onCuepoint: player.conf.cuepoints
             },
             screen: {
@@ -240,6 +243,35 @@ Fp3Engine.prototype.load = function(video) {
         }
 
 
+
+        //enable gpu acceleration stagevideo fix for Windows Firefox. All other browsers can accept different wmodes.
+        if (flowplayer.support.browser.mozilla && opts.clip.accelerated) {
+            this.conf.wmode = "direct";
+            common.toggleClass(this.root, "is-accelerated");
+
+            delete opts["play"];
+
+
+           /* var container = common.createElement('div', { className: "flowplayer is-paused" , css: {display: "block" } });
+            var ui = common.createElement('div', { className: "fp-ui" , css: {  display: "block", width: "100%", height: "100%" } });
+
+            common.append(container,ui);
+
+            var ui2 = common.find('.fp-ui', container)[0];
+
+            var url = common.css(ui2, "backgroundImage").replace(/^url\(['"]?/,'').replace(/['"]?\)$/,'');
+
+            //console.log(url);
+
+            opts.play = {
+                url:  url
+            }
+
+            container = null;
+            ui = null;*/
+        }
+
+
         this.api = Fp3EngineUtils.embed(this.conf.swf, opts, this.conf.wmode, bg)[0];
 
 
@@ -250,6 +282,29 @@ Fp3Engine.prototype.load = function(video) {
             var container = common.find('.fp-player', this.root)[0];
             common.prepend(container, this.api);
         }
+
+       /* var playerContainer = common.find('.fp-player', this.root)[0];
+        var container = common.createElement('div', { css: { "z-index":1, position: "absolute", display: "inline-block", width: "100%", height: "100%" } });
+        common.append(container, this.api);
+        common.prepend(this.root, container);*/
+
+        //var iframe = common.createElement('iframe', { css: { background: "#333333", alpha: 0.8, "z-index":99, position: "absolute", display: "block", width: "100%", height: "100%" } });
+
+        //common.insertAfter(this.root, container, iframe);
+
+
+       // var ui = common.find(".fp-player", this.root)[0];
+
+       // common.css(ui, { "z-index": 1000, position:"absolute" });
+
+        //var fs = common.createElement('a', { className: "fp-fullscreen1"});
+
+        //var ui2 = common.find(".fp-ui", this.root)[0];
+
+
+        //common.append(ui2, fs);
+
+
 
 
         // throw error if no loading occurs
