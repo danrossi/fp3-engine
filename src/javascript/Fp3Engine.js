@@ -242,33 +242,38 @@ Fp3Engine.prototype.load = function(video) {
             opts.clip.netConnectionUrl = this.conf.rtmp;
         }
 
-
-
+        
         //enable gpu acceleration stagevideo fix for Windows Firefox. All other browsers can accept different wmodes.
-        if (flowplayer.support.browser.mozilla && opts.clip.accelerated) {
-            this.conf.wmode = "direct";
-            common.toggleClass(this.root, "is-accelerated");
+        if (opts.clip.accelerated) {
 
-            delete opts["play"];
+            var isFirefox = /Firefox/.test(navigator.userAgent);
 
+            if (isFirefox) {
 
-           /* var container = common.createElement('div', { className: "flowplayer is-paused" , css: {display: "block" } });
-            var ui = common.createElement('div', { className: "fp-ui" , css: {  display: "block", width: "100%", height: "100%" } });
+                this.conf.wmode = "direct";
+                common.toggleClass(this.root, "is-accelerated");
 
-            common.append(container,ui);
+                delete opts["play"];
 
-            var ui2 = common.find('.fp-ui', container)[0];
+                /* var container = common.createElement('div', { className: "flowplayer is-paused" , css: {display: "block" } });
+                 var ui = common.createElement('div', { className: "fp-ui" , css: {  display: "block", width: "100%", height: "100%" } });
 
-            var url = common.css(ui2, "backgroundImage").replace(/^url\(['"]?/,'').replace(/['"]?\)$/,'');
+                 common.append(container,ui);
 
-            //console.log(url);
+                 var ui2 = common.find('.fp-ui', container)[0];
 
-            opts.play = {
-                url:  url
+                 var url = common.css(ui2, "backgroundImage").replace(/^url\(['"]?/,'').replace(/['"]?\)$/,'');
+
+                 //console.log(url);
+
+                 opts.play = {
+                 url:  url
+                 }
+
+                 container = null;
+                 ui = null;*/
             }
 
-            container = null;
-            ui = null;*/
         }
 
 
