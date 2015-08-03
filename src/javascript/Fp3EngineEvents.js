@@ -43,6 +43,8 @@ Fp3EngineEvents.prototype.onClipAdd =  flowplayer.common.noop;
 Fp3EngineEvents.prototype.onLoad = flowplayer.common.noop;
 
 Fp3EngineEvents.prototype.onBeforeBegin = flowplayer.common.noop;
+Fp3EngineEvents.prototype.onBeforeFinish = flowplayer.common.noop;
+Fp3EngineEvents.prototype.onLastSecond = flowplayer.common.noop;
 
 Fp3EngineEvents.prototype.onConnect = flowplayer.common.noop;
 
@@ -104,6 +106,10 @@ Fp3EngineEvents.prototype.onMetaData = function(e) {
 
 Fp3EngineEvents.prototype.onStart = function() {
     this.triggerEvent("resume");
+}
+
+Fp3EngineEvents.prototype.onFinish = function() {
+    this.triggerEvent("finish");
 }
 
 Fp3EngineEvents.prototype.onSwitch = function(e) {

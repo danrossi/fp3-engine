@@ -242,11 +242,14 @@ Fp3Engine.prototype.load = function(video) {
             opts.clip.netConnectionUrl = this.conf.rtmp;
         }
 
-        
+
         //enable gpu acceleration stagevideo fix for Windows Firefox. All other browsers can accept different wmodes.
         if (opts.clip.accelerated) {
 
-            var isFirefox = /Firefox/.test(navigator.userAgent);
+
+            var isFirefox = navigator.userAgent.indexOf("Firefox") > -1 && navigator.userAgent.indexOf("Windows") > -1;
+
+            console.log(isFirefox);
 
             if (isFirefox) {
 
