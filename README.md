@@ -9,6 +9,12 @@ Customised main players will have to be devised also as the default Flash is too
 
 Native fullscreen in Flash and GPU accelerated playback is desireable for performance reasons.
 
+GPU accelerated playback is enabled by default and can be disabled with clip: { accelerated: false }.
+
+For Flowplayer 6 controls and overlays css fixes are required for Windows Firefox which requires a wmode of "direct" where other browsers will enable GPU mode in opaque wmode.
+
+
+
 Any of the plugins i.e Ads can be loaded here which I believe is what DFP Ads is still using for playback.
 
 
