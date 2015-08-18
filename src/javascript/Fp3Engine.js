@@ -249,8 +249,6 @@ Fp3Engine.prototype.load = function(video) {
 
             var isFirefox = navigator.userAgent.indexOf("Firefox") > -1 && navigator.userAgent.indexOf("Windows") > -1;
 
-            console.log(isFirefox);
-
             if (isFirefox) {
 
                 this.conf.wmode = "direct";
@@ -319,8 +317,8 @@ Fp3Engine.prototype.load = function(video) {
         // detect disabled flash
         this.checkLoaded();
 
-        this.clearProgress();
-        if (this.player.conf.autoplay) this.startProgress();
+        //this.clearProgress();
+        //if (this.player.conf.autoplay) this.startProgress();
 
 
         var events = new Fp3EngineEvents(this);

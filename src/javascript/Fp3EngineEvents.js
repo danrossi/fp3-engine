@@ -56,8 +56,6 @@ Fp3EngineEvents.prototype.onBeforePluginEvent = flowplayer.common.noop;
 
 Fp3EngineEvents.prototype.onResized = flowplayer.common.noop;
 
-Fp3EngineEvents.prototype.onBegin = flowplayer.common.noop;
-
 Fp3EngineEvents.prototype.onBeforePause = flowplayer.common.noop;
 
 Fp3EngineEvents.prototype.onBeforeResume = flowplayer.common.noop;
@@ -93,6 +91,11 @@ Fp3EngineEvents.prototype.onBufferStop = flowplayer.common.noop;
 
 Fp3EngineEvents.prototype.onPluginEvent = function(e) {
     this.triggerEvent("pluginevent", e);
+}
+
+Fp3EngineEvents.prototype.onBegin = function(e) {
+    this.engine.clearProgress();
+    this.engine.startProgress();
 }
 
 Fp3EngineEvents.prototype.onMetaDataChange = function(e) {
